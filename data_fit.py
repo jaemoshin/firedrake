@@ -55,4 +55,5 @@ def pcn(y_act, c = 0.01, iter = 10, beta = 1/2, cov = np.ones((1,1)), nsteps = 1
        J = J_hat
        cumulative_avg = (cumulative_avg * k + np.exp(J_hat))/(k + 1)
 
+  np.savetxt('res.txt', np.array([np.exp(J)], acc_probs, exp_J_hats, [cumulative_avg]))
   return np.exp(J), acc_probs, exp_J_hats, cumulative_avg
