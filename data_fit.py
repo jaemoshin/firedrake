@@ -33,7 +33,7 @@ def pcn(y_act, c = 0.01, iter = 10, beta = 1/2, cov = np.ones((1,1)), nsteps = 1
   exp_J_hats = []
   cumulative_avg = np.exp(J)
 
-  for k in ProgressBar(f'iterations').range(iter):
+  for k in ProgressBar(f'iterations').iter(range(iter)):
     print(k)
     xi = np.random.multivariate_normal(np.zeros(( len, )) + np.log(0.01), cov , size = len)#Centred Gaussian Measure
     #positive J ~ multivariate normal (log c0, )
