@@ -93,11 +93,11 @@ def gauge_set(c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200)
     
     listt = np.zeros((gauge_num, nsteps))
 
-    for step in range(nsteps):
+    for step in ProgressBar(f'nsteps').range(nsteps):
         t0 += dt0
         t.assign(t0)
         TideSolver.solve()
-        print(norm(eta))
+        #print(norm(eta))
         wn.assign(wn1)
         #if step%10 == 0:
             #file0.write(u, eta)

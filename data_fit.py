@@ -33,7 +33,8 @@ def pcn(y_act, c = 0.01, iter = 10, beta = 1/2, cov = np.ones((1,1)), nsteps = 1
   exp_J_hats = []
   cumulative_avg = np.exp(J)
 
-  for k in range(iter):
+  for k in ProgressBar(f'iterations').range(iter):
+    print(k)
     xi = np.random.multivariate_normal(np.zeros(( len, )) + np.log(0.01), cov , size = len)#Centred Gaussian Measure
     #positive J ~ multivariate normal (log c0, )
     #c = exp(J) 
@@ -55,5 +56,9 @@ def pcn(y_act, c = 0.01, iter = 10, beta = 1/2, cov = np.ones((1,1)), nsteps = 1
        J = J_hat
        cumulative_avg = (cumulative_avg * k + np.exp(J_hat))/(k + 1)
 
-  np.savetxt('res.txt', np.array([np.exp(J)], acc_probs, exp_J_hats, [cumulative_avg]))
+  # Save the results to a file
+  np.savetxt('pcn_results.txt', np.array([np.exp(J)]), fmt='%.6f')
+  np.savetxt('acc_probs.txt', np.array(acc_probs), fmt='%.6f')
+  np.savetxt('exp_J_hats.txt', np.array(exp_J_hats), fmt='%.6f')
+  np.savetxt('cumulative_avg.txt', np.array([cumulative_avg]), fmt='%.6f')
   return np.exp(J), acc_probs, exp_J_hats, cumulative_avg
