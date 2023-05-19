@@ -2,7 +2,7 @@ import numpy as np
 from firedrake import *
 from solver import gauge_settwo
 
-def pcn(TideSolver, y_act, c = Cosntant(0.01), iter = 10, beta = 1/2, cov = np.ones((1,1)), nsteps = 1200):
+def pcn(TideSolver, y_act, c = Constant(0.01), iter = 10, beta = 1/2, cov = np.ones((1,1)), nsteps = 1200):
 
   import numpy as np
   import matplotlib.pyplot as plt
