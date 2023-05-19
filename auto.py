@@ -20,7 +20,7 @@ from data_fit import pcn
 
 # Define the parameters for pcn
 y_act = result  # Use the result from gauge_set
-c = 0.01
+c = Constant(0.01)
 iterations = 100
 beta = 1/2
 cov = np.ones((1, 1))
