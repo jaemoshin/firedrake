@@ -2,7 +2,7 @@ from firedrake import *
 import matplotlib.pyplot as plt
 import numpy as np
 
-def gauge_set(c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200): 
+def solve_tides(c = Constant(0.001)): 
     
     """
     Generate a 2D numpy array with rows as tide gauges and columns as time
@@ -84,12 +84,24 @@ def gauge_set(c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200)
     }
 
     TideSolver = NonlinearVariationalSolver(TideProblem, solver_parameters=solver_parameters)
+    
+    return TideSolver
 
+def gauge_settwo(TideSolver, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
+    
+    mesh = PeriodicRectangleMesh(50,50,20000, 5000, direction = "x") #mesh with actual length
+    V = FunctionSpace(mesh, "BDM", 1) #Linear vector fields in each triangle
+    #normal component is continuous between triangles
+    Q = FunctionSpace(mesh, "DG", 0) #constant in each triangle
+    #no continuity constraints
+    W = V*Q 
+    wn = Function(W) 
+    wn1 = Function(W) 
+    t = Constant(0) #time
     t0 = 0.0
+    dt0 = 12*3600/50 
     file0 = File("tide.pvd")
     u, eta = wn.split()
-    #file0.write(u, eta)
-
     
     listt = np.zeros((gauge_num, nsteps))
 
@@ -107,17 +119,5 @@ def gauge_set(c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200)
 
             listt[j][step] = eta.at(j*0.1+ 0.5,0.5) #sample at this point
 
-
-    #np.savetxt('locetaexp.txt', listt)
-
     return listt[:, t_trunc:]
-
-#np.savetxt('loceta.txt', list)
-
-#with open(r'/home/jms19/M4R/tides/loceta.txt', 'w') as fp:
-#    fp.write("%s\n" % list)
-
-#xaxis = np.arange(10)
-#print(list)
-#plt.plot(list)
 
