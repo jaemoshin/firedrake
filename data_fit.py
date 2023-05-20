@@ -44,11 +44,11 @@ def pcn(TideSolver, y_act, c = Constant(0.01), iter = 10, beta = 1/2, cov = np.o
 
     unif = np.random.uniform(0,1) 
     
-    c.assign(np.exp(J))
+    c = np.exp(J)
     TideSolverone = TideSolver()
     y_obs_c = gauge_settwo(TideSolverone, np.exp(J), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
 
-    c.assign(np.exp(J_hat))
+    c = np.exp(J_hat)
     TideSolvertwo = TideSolver()
     y_obs_c_hat = gauge_settwo(TideSolvertwo, np.exp(J_hat), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
 
