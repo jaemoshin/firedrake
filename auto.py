@@ -19,15 +19,12 @@ result = gauge_settwo(TideSolver, c=c, t_trunc=t_trunc, gauge_num=gauge_num, nst
 from data_fit import pcn
 
 # Define the parameters for pcn
-y_act = result  # Use the result from gauge_set
-c = 0.01
 iterations = 100
 beta = 1/2
 cov = np.ones((1, 1))
-nsteps = 1200
 
 # Call the pcn function
-pcn_result = pcn(TideSolver, y_act, c=c, iter=iterations, beta=beta, cov=cov, nsteps=nsteps)
+pcn_result = pcn(TideSolver, result, c=0.01, iter=iterations, beta=beta, cov=cov, nsteps=nsteps)
 
 # Print or process the pcn_result as needed
 print(pcn_result)
