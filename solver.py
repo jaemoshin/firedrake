@@ -85,18 +85,11 @@ def solve_tides(c = Constant(0.001)):
 
     TideSolver = NonlinearVariationalSolver(TideProblem, solver_parameters=solver_parameters)
     
-    return TideSolver
+    return TideSolver, wn, wn1
 
-def gauge_settwo(TideSolver, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
+def gauge_settwo(TideSolver, wn, wn1, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
     
-    mesh = PeriodicRectangleMesh(50,50,20000, 5000, direction = "x") #mesh with actual length
-    V = FunctionSpace(mesh, "BDM", 1) #Linear vector fields in each triangle
-    #normal component is continuous between triangles
-    Q = FunctionSpace(mesh, "DG", 0) #constant in each triangle
-    #no continuity constraints
-    W = V*Q 
-    wn = Function(W) 
-    wn1 = Function(W) 
+
     t = Constant(0) #time
     t0 = 0.0
     dt0 = 12*3600/50 
