@@ -28,7 +28,7 @@ def pcn(TideSolver, y_act, c = Constant(0.01), iter = 10, beta = 1/2, cov = np.o
     return np.sum(entries.T@inv_cov@entries)
 
   len = 1
-  J = np.log(c.eval())
+  J = np.log(c.dat.data)[0]
   acc_probs = []
   exp_J_hats = []
   cumulative_avg = np.exp(J)
