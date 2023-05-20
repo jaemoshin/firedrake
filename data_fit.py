@@ -50,9 +50,10 @@ def pcn(TideSolver, y_act, c = Constant(0.01), iter = 10, beta = 1/2, cov = np.o
 
     acc_prob = np.minimum(1, np.exp(phi(y_act, y_obs_c) - phi(y_act, y_obs_c_hat)))
     
-    print(y_act-y_obs_c)
-    print(y_act-y_obs_c_hat)
-    
+    print(y_act)
+    print(y_obs_c)
+    print(y_obs_c_hat)
+
     
     acc_probs.append(acc_prob)
     exp_J_hats.append(np.exp(J_hat))
