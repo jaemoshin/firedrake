@@ -6,6 +6,7 @@ def pcn(TideSolver, wn, wn1, y_act, c = Constant(0.01), iter = 10, beta = 1/2, c
 
   import numpy as np
   import matplotlib.pyplot as plt
+  import copy
   """
   inputs
 
@@ -46,11 +47,17 @@ def pcn(TideSolver, wn, wn1, y_act, c = Constant(0.01), iter = 10, beta = 1/2, c
     
     c.assign(Constant(np.exp(J)))
 
-    y_obs_c = gauge_settwo(TideSolver, wn, wn1, Constant(np.exp(J)), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
+    wn_copy = copy.deepcopy(wn)
+    wn1_copy = copy.deepcopy(wn1)
+
+    y_obs_c = gauge_settwo(TideSolver, wn_copy, wn1_copy, Constant(np.exp(J)), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
 
     c.assign(Constant(np.exp(J_hat)))
 
-    y_obs_c_hat = gauge_settwo(TideSolver, wn, wn1, Constant(np.exp(J_hat)), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
+    wn_copy = copy.deepcopy(wn)
+    wn1_copy = copy.deepcopy(wn1)
+
+    y_obs_c_hat = gauge_settwo(TideSolver, wn_copy, wn1_copy, Constant(np.exp(J_hat)), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
 
     acc_prob = np.minimum(1, np.exp(phi(y_act, y_obs_c) - phi(y_act, y_obs_c_hat)))
     
