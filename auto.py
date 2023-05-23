@@ -9,11 +9,10 @@ c = Constant(0.001)
 t_trunc = 900
 gauge_num = 20
 nsteps = 1200
-git
 TideSolver, wn, wn1, t= solve_tides(c = Constant(0.001))
 
 # Call the gauge_set function
-result = gauge_settwo(TideSolver, wn, wn1, t= t, c=c, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
+result = gauge_settwo(TideSolver, wn, wn1, t= t,c=c, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
 print(result)
 # Import the pcn function from data_fit
