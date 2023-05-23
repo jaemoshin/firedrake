@@ -44,7 +44,7 @@ def solve_tides(c = Constant(0.001)):
     F0 = 0
     F = F0*as_vector((sin(2*pi*t/(12*3600)), 0)) 
 
-    un, etan = wn.split()
+    un, etan = wn.subfunctions
     print('norm before', norm(etan))
     un, etan = split(wn)
     un1, etan1 = split(wn1)
@@ -72,14 +72,7 @@ def solve_tides(c = Constant(0.001)):
             #'ksp_converged_reason':None,
             'ksp_rtol': 1e-6,
             'pc_type': 'lu',
-            'pc_gamg_sym_graph': None,
-            'mg_levels': {
-                'ksp_type': 'chebyshev',
-                'ksp_chebyshev_esteig': None,
-                'ksp_max_it': 5,
-                'pc_type': 'bjacobi',
-                'sub_pc_type': 'ilu'
-            }
+            'pc_factor_mat_solver_type':'mumps'
         }
     }
 
@@ -93,7 +86,7 @@ def gauge_settwo(TideSolver, wn, wn1, t, c = Constant(0.001), t_trunc = 900, gau
     t0 = 0.0
     dt0 = 12*3600/50 
     file0 = File("tide.pvd")
-    u, eta = wn.split()
+    u, eta = wn.subfunctions
     
     listt = np.zeros((gauge_num, nsteps))
     
