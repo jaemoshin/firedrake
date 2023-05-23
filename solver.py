@@ -1,8 +1,6 @@
 from firedrake import *
 import matplotlib.pyplot as plt
 import numpy as np
-import copy
-
 
 def solve_tides(c = Constant(0.001)): 
     
@@ -89,23 +87,25 @@ def solve_tides(c = Constant(0.001)):
     
     return TideSolver, wn, wn1
 
-def gauge_settwo(TideSolver, wn_copy, wn1_copy, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
+def gauge_settwo(TideSolver, wn, wn1, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
     
 
     t = Constant(0) #time
     t0 = 0.0
     dt0 = 12*3600/50 
     file0 = File("tide.pvd")
-    u, eta = wn_copy.split()
+    u, eta = wn.split()
     
     listt = np.zeros((gauge_num, nsteps))
+    
+    wn.assign(0)
 
     for step in ProgressBar(f'nsteps').iter(range(nsteps)):
         t0 += dt0
         t.assign(t0)
         TideSolver.solve()
         #print(norm(eta))
-        wn_copy.assign(wn1_copy)
+        wn.assign(wn1)
         #if step%10 == 0:
             #file0.write(u, eta)
         #print(t0)
@@ -113,6 +113,8 @@ def gauge_settwo(TideSolver, wn_copy, wn1_copy, c = Constant(0.001), t_trunc = 9
         for j in range(gauge_num):
 
             listt[j][step] = eta.at(j*0.1+ 0.5,0.5) #sample at this point
+    
+    
 
     return listt[:, t_trunc:]
 
