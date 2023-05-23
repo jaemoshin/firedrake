@@ -25,7 +25,7 @@ beta = 1/2
 cov = np.ones((1, 1))
 
 # Call the pcn function
-pcn_result = pcn(TideSolver, wn, wn1, result, c=Constant(0.01), iter=iterations, beta=beta, cov=cov, nsteps=nsteps)
+pcn_result = pcn(TideSolver, wn, wn1, t, result, c=Constant(0.01), iter=iterations, beta=beta, cov=cov, nsteps=nsteps)
 
 # Print or process the pcn_result as needed
 print(pcn_result)
