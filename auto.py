@@ -4,18 +4,16 @@ from data_gen import gauge_set
 from data_fit import pcn
 from solver import solve_tides
 from solver import gauge_settwo
-import copy
 # Define the parameters for gauge_set
 c = Constant(0.001)
 t_trunc = 900
 gauge_num = 20
 nsteps = 1200
 
-TideSolver, wn, wn1, = solve_tides(c = Constant(0.001))
-wn_copy = copy.deepcopy(wn)
-wn1_copy = copy.deepcopy(wn1)
+TideSolver, wn, wn1, t= solve_tides(c = Constant(0.001))
+
 # Call the gauge_set function
-result = gauge_settwo(TideSolver, wn_copy, wn1_copy, c=c, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
+result = gauge_settwo(TideSolver, wn, wn1, c=c, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
 print(result)
 # Import the pcn function from data_fit
