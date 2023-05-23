@@ -6,7 +6,6 @@ def pcn(TideSolver, wn, wn1, y_act, c = Constant(0.01), iter = 10, beta = 1/2, c
 
   import numpy as np
   import matplotlib.pyplot as plt
-  import copy
   """
   inputs
 
@@ -34,8 +33,9 @@ def pcn(TideSolver, wn, wn1, y_act, c = Constant(0.01), iter = 10, beta = 1/2, c
   exp_J_hats = []
   cumulative_avg = np.exp(J)
 
+
   for k in ProgressBar(f'iterations').iter(range(iter)):
-    print(k)
+    
     xi = np.random.multivariate_normal(np.zeros(( len, )) + np.log(0.01), cov , size = len)#Centred Gaussian Measure
     #positive J ~ multivariate normal (log c0, )
     #c = exp(J) 
@@ -47,17 +47,11 @@ def pcn(TideSolver, wn, wn1, y_act, c = Constant(0.01), iter = 10, beta = 1/2, c
     
     c.assign(Constant(np.exp(J)))
 
-    wn_copy = copy.deepcopy(wn)
-    wn1_copy = copy.deepcopy(wn1)
-
-    y_obs_c = gauge_settwo(TideSolver, wn_copy, wn1_copy, Constant(np.exp(J)), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
+    y_obs_c = gauge_settwo(TideSolver, wn, wn1, t, Constant(np.exp(J)), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
 
     c.assign(Constant(np.exp(J_hat)))
 
-    wn_copy = copy.deepcopy(wn)
-    wn1_copy = copy.deepcopy(wn1)
-
-    y_obs_c_hat = gauge_settwo(TideSolver, wn_copy, wn1_copy, Constant(np.exp(J_hat)), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
+    y_obs_c_hat = gauge_settwo(TideSolver, wn, wn1, t, Constant(np.exp(J_hat)), t_trunc = 900, gauge_num = 20, nsteps = nsteps)
 
     acc_prob = np.minimum(1, np.exp(phi(y_act, y_obs_c) - phi(y_act, y_obs_c_hat)))
     
