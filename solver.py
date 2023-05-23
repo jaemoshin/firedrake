@@ -85,12 +85,11 @@ def solve_tides(c = Constant(0.001)):
 
     TideSolver = NonlinearVariationalSolver(TideProblem, solver_parameters=solver_parameters)
     
-    return TideSolver, wn, wn1
+    return TideSolver, wn, wn1, t
 
-def gauge_settwo(TideSolver, wn, wn1, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
+def gauge_settwo(TideSolver, wn, wn1, t, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
     
 
-    t = Constant(0) #time
     t0 = 0.0
     dt0 = 12*3600/50 
     file0 = File("tide.pvd")
@@ -118,3 +117,4 @@ def gauge_settwo(TideSolver, wn, wn1, c = Constant(0.001), t_trunc = 900, gauge_
 
     return listt[:, t_trunc:]
 
+    "comment"
