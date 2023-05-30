@@ -82,7 +82,7 @@ def solve_tides(c = Constant(0.001)):
 
 def gauge_settwo(TideSolver, wn, wn1, t, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
     
-
+        
     t0 = 0.0
     dt0 = 12*3600/50 
     file0 = File("tide.pvd")
@@ -90,7 +90,6 @@ def gauge_settwo(TideSolver, wn, wn1, t, c = Constant(0.001), t_trunc = 900, gau
     
     listt = np.zeros((gauge_num, nsteps))
     
-    t.assign(0.0)
     wn.assign(0)
 
     for step in ProgressBar(f'nsteps').iter(range(nsteps)):
