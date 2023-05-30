@@ -40,8 +40,8 @@ def solve_tides(c = Constant(0.001)):
     dt = Constant(dt0) #12*3600/50 timestep
     H = Constant(700) #700 Ocean depth
     t = Constant(0) #time
-    #F0 = Constant(10**-7) #10^-7 
-    F0 = 0
+    F0 = Constant(10**-7) #10^-7 
+    #F0 = 0
     F = F0*as_vector((sin(2*pi*t/(12*3600)), 0)) 
 
     un, etan = wn.subfunctions
