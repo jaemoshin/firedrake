@@ -52,10 +52,10 @@ def solve_tides(c = Constant(0.001)):
     etanh = (etan + etan1)/2
     equation = (
         inner(v, un1 - un) + f*inner(v, as_vector((-unh[1], unh[0])))*dt
-        - g*div(v)*(etanh - b)*dt
+        - g*div(v)*(etanh)*dt
         - inner(F, v)*dt
         + c*inner(v, unh)*dt
-        + phi*(etan1 - etan) + H*phi*div(unh)*dt
+        + phi*(etan1 - etan) + (H-b)*phi*div(unh)*dt
     )*dx
 
     Bc = [DirichletBC(W.sub(0), [0,0], "on_boundary")]
