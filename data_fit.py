@@ -44,7 +44,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.01), iter = 10, beta = 0.0
     #generate both c from the same distribution
     #
     J_hat = np.sqrt(1 - beta**2)*J + beta*xi[0][0]
-
+    print(J_hat)
     unif = np.random.uniform(0,1) 
     
     c.assign(Constant(np.exp(J)))
