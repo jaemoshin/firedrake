@@ -24,8 +24,8 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.01), iter = 10, beta = 0.0
     Return phi value
     """
     entries = y_act-y_obs
-    inv_cov = np.identity(len(entries))/np.var(entries)
-    res = np.sum(entries.T@inv_cov@entries)
+    squared_norm = np.linalg.norm(entries) ** 2
+    res = squared_norm / 10
     print(res)
     return res
 
@@ -42,7 +42,6 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.01), iter = 10, beta = 0.0
     #positive J ~ multivariate normal (log c0, )
     #c = exp(J) 
     #generate both c from the same distribution
-    #
     J_hat = np.sqrt(1 - beta**2)*J + beta*xi[0][0]
     print(J_hat)
     unif = np.random.uniform(0,1) 
