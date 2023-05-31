@@ -107,5 +107,8 @@ def gauge_settwo(TideSolver, wn, wn1, t, c = Constant(0.001), t_trunc = 900, gau
             listt[j][step] = eta.at(j*0.1+ 0.5,0.5) #sample at this point
     
     
+    array_2d = np.array(listt[:, t_trunc:])
+    vector = array_2d.flatten()
+    return vector
 
-    return listt[:, t_trunc:]
+    #

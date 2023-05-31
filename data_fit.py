@@ -24,7 +24,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.01), iter = 10, beta = 0.0
     Return phi value
     """
     entries = y_act-y_obs
-    inv_cov = np.identity(entries.shape[0])/np.var(entries)
+    inv_cov = np.identity(len(entries))/np.var(entries)
     res = np.sum(entries.T@inv_cov@entries)
     print(res)
     return res
