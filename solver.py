@@ -40,8 +40,8 @@ def solve_tides(c = Constant(0.001)):
     dt = Constant(dt0) #12*3600/50 timestep
     H = Constant(700) #700 Ocean depth
     t = Constant(0) #time
-    #F0 = Constant(10**-7) #10^-7 
-    F0 = 0
+    F0 = Constant(10**-7) #10^-7 
+    #F0 = 0
     F = F0*as_vector((sin(2*pi*t/(12*3600)), 0)) 
 
     un, etan = wn.subfunctions
@@ -52,10 +52,10 @@ def solve_tides(c = Constant(0.001)):
     etanh = (etan + etan1)/2
     equation = (
         inner(v, un1 - un) + f*inner(v, as_vector((-unh[1], unh[0])))*dt
-        - g*div(v)*(etanh - b)*dt
+        - g*div(v)*(etanh)*dt
         - inner(F, v)*dt
         + c*inner(v, unh)*dt
-        + phi*(etan1 - etan) + H*phi*div(unh)*dt
+        + phi*(etan1 - etan) + (H-b)*phi*div(unh)*dt
     )*dx
 
     Bc = [DirichletBC(W.sub(0), [0,0], "on_boundary")]
@@ -82,7 +82,7 @@ def solve_tides(c = Constant(0.001)):
 
 def gauge_settwo(TideSolver, wn, wn1, t, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
     
-
+        
     t0 = 0.0
     dt0 = 12*3600/50 
     file0 = File("tide.pvd")
@@ -107,5 +107,8 @@ def gauge_settwo(TideSolver, wn, wn1, t, c = Constant(0.001), t_trunc = 900, gau
             listt[j][step] = eta.at(j*0.1+ 0.5,0.5) #sample at this point
     
     
+    array_2d = np.array(listt[:, t_trunc:])
+    vector = array_2d.flatten()
+    return vector
 
-    return listt[:, t_trunc:]
+    #
