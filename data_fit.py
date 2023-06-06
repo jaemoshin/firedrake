@@ -55,7 +55,6 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.01), iter = 10, beta = 0.0
     y_obs_c_hat = gauge_settwo(TideSolver, wn, wn1, t, t_trunc = t_trunc, gauge_num = 20, nsteps = nsteps)
     
     d = np.exp(phi(y_act, y_obs_c) - phi(y_act, y_obs_c_hat))
-    print(d)
     acc_prob = np.minimum(1, d)
     
     print(acc_prob)
