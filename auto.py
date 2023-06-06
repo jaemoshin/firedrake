@@ -8,7 +8,7 @@ from solver import gauge_settwo
 
 t_trunc = 100
 gauge_num = 20
-nsteps = 1000
+nsteps = 400
 TideSolver, wn, wn1, t, F0, c = solve_tides(c = Constant(0.0001))
 
 # Call the gauge_set function
