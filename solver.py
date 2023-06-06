@@ -2,7 +2,7 @@ from firedrake import *
 import matplotlib.pyplot as plt
 import numpy as np
 
-def solve_tides(c = Constant(0.001)): 
+def solve_tides(c = Constant(0.0001)):
     
     """
     Generate a 2D numpy array with rows as tide gauges and columns as time
@@ -40,7 +40,7 @@ def solve_tides(c = Constant(0.001)):
     dt = Constant(dt0) #12*3600/50 timestep
     H = Constant(700) #700 Ocean depth
     t = Constant(0) #time
-    F0 = Constant(10**-7) #10^-7 
+    F0 = Constant(10**-1) #10^-7 
     #F0 = 0
     F = F0*as_vector((sin(2*pi*t/(12*3600)), 0)) 
 
@@ -78,9 +78,9 @@ def solve_tides(c = Constant(0.001)):
 
     TideSolver = NonlinearVariationalSolver(TideProblem, solver_parameters=solver_parameters)
     
-    return TideSolver, wn, wn1, t
+    return TideSolver, wn, wn1, t, F0, c
 
-def gauge_settwo(TideSolver, wn, wn1, t, c = Constant(0.001), t_trunc = 900, gauge_num = 20, nsteps = 1200):
+def gauge_settwo(TideSolver, wn, wn1, t, t_trunc = 900, gauge_num = 20, nsteps = 1200):
     
         
     t0 = 0.0
@@ -110,5 +110,3 @@ def gauge_settwo(TideSolver, wn, wn1, t, c = Constant(0.001), t_trunc = 900, gau
     array_2d = np.array(listt[:, t_trunc:])
     vector = array_2d.flatten()
     return vector
-
-    #

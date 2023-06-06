@@ -5,11 +5,11 @@ from data_fit import pcn
 from solver import solve_tides
 from solver import gauge_settwo
 # Define the parameters for gauge_set
-c = Constant(0.001)
-t_trunc = 0
+
+t_trunc = 100
 gauge_num = 20
-nsteps = 100
-TideSolver, wn, wn1, t= solve_tides(c = Constant(0.001))
+nsteps = 1000
+TideSolver, wn, wn1, t, c = solve_tides(c = Constant(0.0001))
 
 # Call the gauge_set function
 result = gauge_settwo(TideSolver, wn, wn1, t= t,c=c, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)

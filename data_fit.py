@@ -48,11 +48,11 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.01), iter = 10, beta = 0.0
     
     c.assign(Constant(np.exp(J)))
 
-    y_obs_c = gauge_settwo(TideSolver, wn, wn1, t, Constant(np.exp(J)), t_trunc = t_trunc, gauge_num = 20, nsteps = nsteps)
+    y_obs_c = gauge_settwo(TideSolver, wn, wn1, t, t_trunc = t_trunc, gauge_num = 20, nsteps = nsteps)
 
     c.assign(Constant(np.exp(J_hat)))
 
-    y_obs_c_hat = gauge_settwo(TideSolver, wn, wn1, t, Constant(np.exp(J_hat)), t_trunc = t_trunc, gauge_num = 20, nsteps = nsteps)
+    y_obs_c_hat = gauge_settwo(TideSolver, wn, wn1, t, t_trunc = t_trunc, gauge_num = 20, nsteps = nsteps)
     
     d = np.exp(phi(y_act, y_obs_c) - phi(y_act, y_obs_c_hat))
     print(d)
