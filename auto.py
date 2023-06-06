@@ -8,7 +8,7 @@ from solver import gauge_settwo
 
 t_trunc = 100
 gauge_num = 20
-nsteps = 400
+nsteps = 200
 TideSolver, wn, wn1, t, F0, c = solve_tides(c = Constant(0.0001))
 
 # Call the gauge_set function
@@ -25,7 +25,7 @@ beta = 0.001
 cov = np.ones((1, 1))
 
 # Call the pcn function
-pcn_result = pcn(TideSolver, wn, wn1, t, result, c=Constant(0.01), iter=iterations, beta=beta, cov=cov, t_trunc = t_trunc, nsteps=nsteps)
+pcn_result = pcn(TideSolver, wn, wn1, t, result, c=Constant(0.001), iter=iterations, beta=beta, cov=cov, t_trunc = t_trunc, nsteps=nsteps)
 
 # Print or process the pcn_result as needed
 print(pcn_result)
