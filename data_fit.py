@@ -25,7 +25,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.01), iter = 10, beta = 0.0
     """
     entries = y_act-y_obs
     squared_norm = np.linalg.norm(entries) ** 2
-    res = squared_norm / 10
+    res = squared_norm *100
     print(res)
     return res
 
@@ -43,7 +43,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.01), iter = 10, beta = 0.0
     #c = exp(J) 
     #generate both c from the same distribution
     J_hat = np.sqrt(1 - beta**2)*J + beta*xi[0][0]
-    print(J_hat)
+    print(np.exp(J_hat))
     unif = np.random.uniform(0,1) 
     
     c.assign(Constant(np.exp(J)))
