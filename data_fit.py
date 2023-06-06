@@ -65,6 +65,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     
     if unif <= acc_prob:
        J = J_hat
+       print("accepted")
        cumulative_avg = (cumulative_avg * k + np.exp(J_hat))/(k + 1)
     print("c = " + str(np.exp(J)))
   # Save the results to a file
