@@ -23,7 +23,7 @@ from data_fit import pcn
 iterations = 100
 beta = 0.025
 cov = np.ones((1, 1))
-
+TideSolver, wn, wn1, t, F0, c = solve_tides(c = Constant(0.001))
 # Call the pcn function
 pcn_result = pcn(TideSolver, wn, wn1, t, result, c=Constant(0.001), iter=iterations, beta=beta, cov=cov, t_trunc = t_trunc, nsteps=nsteps)
 
