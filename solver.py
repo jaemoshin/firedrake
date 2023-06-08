@@ -91,6 +91,7 @@ def gauge_settwo(TideSolver, wn, wn1, t, t_trunc = 900, gauge_num = 20, nsteps =
     listt = np.zeros((gauge_num, nsteps))
     
     wn.assign(0)
+    wn1.assign(0)
 
     for step in ProgressBar(f'nsteps').iter(range(nsteps)):
         t0 += dt0
