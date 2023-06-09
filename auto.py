@@ -13,7 +13,7 @@ TideSolver, wn, wn1, t, F0, c = solve_tides(c = Constant(0.0001))
 
 # Call the gauge_set function
 
-#result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
+result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 #print(result)
 #TideSolver.snes.destroy()
 
@@ -30,7 +30,7 @@ from data_fit import pcn
 
 # Define the parameters for pcn
 
-iterations = 1
+iterations = 100
 beta = 0.025
 cov = np.ones((1, 1))
 
