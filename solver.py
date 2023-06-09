@@ -77,10 +77,10 @@ def solve_tides(c = Constant(0.0001)):
     }
 
 
-    
-
-
     TideSolver = NonlinearVariationalSolver(TideProblem, solver_parameters=solver_parameters)
+
+    prefix = "run_{}".format(id(TideSolver))
+    TideSolver.snes.setOptionsPrefix(prefix)
     
     return TideSolver, wn, wn1, t, F0, c
 
