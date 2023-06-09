@@ -4,6 +4,8 @@ from data_gen import gauge_set
 from data_fit import pcn
 from solver import solve_tides
 from solver import gauge_settwo
+from petsc4py import PETSc
+
 # Define the parameters for gauge_set
 
 t_trunc = 100
