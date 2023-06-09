@@ -62,8 +62,8 @@ def solve_tides(c = Constant(0.0001)):
     TideProblem = NonlinearVariationalProblem(equation, wn1, bcs = Bc)
  
     solver_parameters = {
-        'snes_lag_jacobian': 100,
-        'snes_lag_jacobian_persists': None,
+        'snes_lag_jacobian': -2,
+        'snes_lag_jacobian_persists':false,
         'snes_type':'ksponly',
         'mat_type': 'matfree',
         'pc_type': 'python',
