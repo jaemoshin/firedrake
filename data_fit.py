@@ -80,7 +80,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
 
   plt.clf()
   # Plot histogram of sampled_c values
-  plt.hist(sampled_c, bins=20, density=True)
+  plt.hist(exp_J_hats, bins=20, density=True)
 
   # Add a vertical line at the true value of c
   true_c = 0.0001
@@ -95,7 +95,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
 
   plt.show()
   plt.savefig("post_dist.pdf")
-  
+
   # Save the results to a file
   np.savetxt('pcn_results.txt', np.array([np.exp(J)]), fmt='%.6f')
   np.savetxt('acc_probs.txt', np.array(acc_probs), fmt='%.6f')
