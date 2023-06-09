@@ -86,10 +86,10 @@ def solve_tides(c = Constant(0.0001)):
             'ksp_type': 'cg',
             'ksp_rtol': 1e-6,
             'pc_type': 'lu'
-        },
-        'snes': {
-            'lag_jacobian': -2
-        }
+        }#,
+        #'snes': {
+        #    'lag_jacobian': -2
+        #}
     }
     
 
