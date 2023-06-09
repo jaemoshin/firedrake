@@ -62,13 +62,14 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     
     print(acc_prob)
 
+    path = "/home/ma/j/jms19/.cache/pytools"
+      shutil.rmtree(path)
     
     acc_probs.append(acc_prob)
     exp_J_hats.append(np.exp(J_hat))
     if k % 5 == 0:
       gc.collect()
-      path = "/home/ma/j/jms19/.cache/pytools"
-      shutil.rmtree(path)
+      
     if unif <= acc_prob:
        J = J_hat
        print("accepted")
