@@ -20,8 +20,8 @@ result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gaug
 
 c.assign(0.001)
 # Modify the solver parameters to reset the Jacobian computation
-#solver_parameters["snes_lag_jacobian"] = -2
-TideSolver.snes.computeJacobian()
+
+TideSolver.snes.getKSP().getPC().setUp()
 
 result2 = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
