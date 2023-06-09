@@ -74,24 +74,15 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     
     print("c = " + str(np.exp(J)))
   
-  # Calculate mean and standard deviation of sampled_c values
-  mean_c = np.mean(exp_J_hats)
-  std_c = np.std(exp_J_hats)
-
   plt.clf()
-  # Plot histogram of sampled_c values
-  plt.hist(exp_J_hats, bins=20, density=True)
 
   # Add a vertical line at the true value of c
   true_c = 0.0001
-  plt.axvline(x=true_c, color='r', linestyle='--')
-
-  # Display mean and standard deviation on the plot
-  plt.text(0.5, 0.9, f"Mean: {mean_c:.3f}\nStd: {std_c:.3f}", transform=plt.gca().transAxes)
-
-  # Set labels for x-axis and y-axis
-  plt.xlabel('c')
-  plt.ylabel('Density')
+  plt.scatter(range(iter), exp_J_hats)
+  plt.xlabel("Iteration")
+  plt.ylabel("Sampled c")
+  plt.title("PCN Sampling - Scatter Plot")
+  
 
   plt.show()
   plt.savefig("post_dist.pdf")
