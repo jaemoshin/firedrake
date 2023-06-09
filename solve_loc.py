@@ -44,7 +44,7 @@ def solve_tides(c = Constant(0.0001)):
     #F0 = 0
     F = F0*as_vector((sin(2*pi*t/(12*3600)), 0)) 
 
-    un, etan = wn.subfunctions
+    un, etan = wn.split()
     print('norm before', norm(etan))
     un, etan = split(wn)
     un1, etan1 = split(wn1)
@@ -71,30 +71,10 @@ def solve_tides(c = Constant(0.0001)):
             'ksp_type': 'cg',
             #'ksp_converged_reason':None,
             'ksp_rtol': 1e-6,
-            'pc_type': 'lu'
+            'pc_type': 'lu',
+            'pc_factor_mat_solver_type':'mumps'
         }
     }
-    
-    """
-    solver_parameters = {
-    #'snes_lag_jacobian': -2,
-    'mat_type': 'matfree',
-    'pc_type': 'python',
-    'pc_python_type': 'firedrake.HybridizationPC',
-    'ksp_type': 'preonly',
-    #'ksp_monitor_true_residual': True,
-    'hybridization': {
-        'ksp_type': 'cg',
-        #'ksp_converged_reason':None,
-        'ksp_rtol': 1e-6,
-        'pc_type': 'lu'
-    },
-    'snes': {
-        'compute_jacobian': lambda snes, x: snes.setLagJacobian(-2)
-    }
-    }
-    """
-
 
     TideSolver = NonlinearVariationalSolver(TideProblem, solver_parameters=solver_parameters)
     
@@ -106,12 +86,11 @@ def gauge_settwo(TideSolver, wn, wn1, t, t_trunc = 900, gauge_num = 20, nsteps =
     t0 = 0.0
     dt0 = 12*3600/50 
     file0 = File("tide.pvd")
-    u, eta = wn.subfunctions
+    u, eta = wn.split()
     
     listt = np.zeros((gauge_num, nsteps))
     
     wn.assign(0)
-    wn1.assign(0)
 
     for step in ProgressBar(f'nsteps').iter(range(nsteps)):
         t0 += dt0
@@ -131,3 +110,5 @@ def gauge_settwo(TideSolver, wn, wn1, t, t_trunc = 900, gauge_num = 20, nsteps =
     array_2d = np.array(listt[:, t_trunc:])
     vector = array_2d.flatten()
     return vector
+
+    #
