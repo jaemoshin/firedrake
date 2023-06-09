@@ -12,13 +12,14 @@ nsteps = 200
 TideSolver, wn, wn1, t, F0, c = solve_tides(c = Constant(0.0001))
 
 # Call the gauge_set function
-print("this commit worked")
-TideSolver.snes.setJacobian(-2)
+print("this commit worked2")
 result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
 c.assign(0.001)
 # Modify the solver parameters to reset the Jacobian computation
-TideSolver.snes.setJacobian(-2)
+# Reset the snes_lag_jacobian parameter to -2 for the next iteration
+TideSolver.snes.setOptionsPrefix('snes')
+TideSolver.snes.setOptionsValue('-snes_lag_jacobian', '-2')
 result2 = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
 print(np.linalg.norm(result-result2))
