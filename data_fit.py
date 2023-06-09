@@ -71,7 +71,9 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
        print("accepted")
        cumulative_avg = (cumulative_avg * k + np.exp(J_hat))/(k + 1)
     print("c = " + str(np.exp(J)))
-  acp = sum(acc_probs)/len(acc_probs)
+  type(acc_probs)
+  print(sum(acc_probs))
+  print(len(acc_probs))
   # Save the results to a file
   np.savetxt('pcn_results.txt', np.array([np.exp(J)]), fmt='%.6f')
   np.savetxt('acc_probs.txt', np.array(acc_probs), fmt='%.6f')
