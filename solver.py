@@ -63,7 +63,6 @@ def solve_tides(c = Constant(0.0001)):
     solver_parameters = {
         'snes_lag_jacobian': -2,
         'snes_lag_jacobian_persists' : False,
-        #'snes_type':'ksponly',
         'mat_type': 'matfree',
         'pc_type': 'python',
         'pc_python_type': 'firedrake.HybridizationPC',
