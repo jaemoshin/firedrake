@@ -1,6 +1,6 @@
 import numpy as np
 from firedrake import *
-from solver import gauge_settwo
+from solver import solve_tides, gauge_settwo
 
 def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.01, cov = np.ones((1,1)), t_trunc = 900, nsteps = 1200):
 
@@ -25,7 +25,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     """
     entries = y_act-y_obs
     squared_norm = np.linalg.norm(entries) ** 2
-    res = squared_norm *10**18
+    res = squared_norm *10
     print(res)
     return res
 
@@ -46,12 +46,15 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     print(np.exp(J_hat))
     unif = np.random.uniform(0,1) 
     
+    TideSolver.snes.destroy()
     c.assign(Constant(np.exp(J)))
-
+    TideSolver, wn, wn1, t, F0, c = solve_tides(c)
     y_obs_c = gauge_settwo(TideSolver, wn, wn1, t, t_trunc = t_trunc, gauge_num = 20, nsteps = nsteps)
 
+    TideSolver.snes.destroy()
     c.assign(Constant(np.exp(J_hat)))
-
+    TideSolver, wn, wn1, t, F0, c = solve_tides(c)
+    
     y_obs_c_hat = gauge_settwo(TideSolver, wn, wn1, t, t_trunc = t_trunc, gauge_num = 20, nsteps = nsteps)
     
     d = np.exp(phi(y_act, y_obs_c) - phi(y_act, y_obs_c_hat))
