@@ -18,10 +18,15 @@ print("this commit worked2")
 
 result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
-c.assign(Constant(0.001))
+c.assign(0.001)
 # Modify the solver parameters to reset the Jacobian computation
 
-TideSolver.snes.getKSP().getPC().setUp()
+TideSolver.snes.computeJacobian = PETSc.SNESComputeJacobianDefault
+TideSolver.snes.computeJacobian = lambda snes, x, J, P: PETSc.SNESComputeJacobian(snes, x, J, P)
+
+# Call the SNESComputeJacobian function to reevaluate the Jacobian
+TideSolver.snes.computeJacobian(TideSolver.snes, wn.vector(), TideSolver.J, TideSolver.P)
+
 result2 = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
 print(np.linalg.norm(result-result2))
