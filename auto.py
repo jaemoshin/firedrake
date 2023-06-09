@@ -15,6 +15,9 @@ TideSolver, wn, wn1, t, F0, c = solve_tides(c = Constant(0.0001))
 
 # Call the gauge_set function
 print("this commit worked2")
+options = PETSc.Options()
+options['-snes_lag_jacobian'] = '-2'
+TideSolver.snes.setFromOptions()
 result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
 c.assign(0.001)
