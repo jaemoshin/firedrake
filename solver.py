@@ -60,9 +60,9 @@ def solve_tides(c = Constant(0.0001)):
 
     Bc = [DirichletBC(W.sub(0), [0,0], "on_boundary")]
     TideProblem = NonlinearVariationalProblem(equation, wn1, bcs = Bc)
-    """
+ 
     solver_parameters = {
-        #'snes_lag_jacobian': -2,
+        'snes_lag_jacobian': -2,
         'mat_type': 'matfree',
         'pc_type': 'python',
         'pc_python_type': 'firedrake.HybridizationPC',
@@ -75,22 +75,8 @@ def solve_tides(c = Constant(0.0001)):
             'pc_type': 'lu'
         }
     }
-    """
-    
-    solver_parameters = {
-        'mat_type': 'matfree',
-        'pc_type': 'python',
-        'pc_python_type': 'firedrake.HybridizationPC',
-        'ksp_type': 'preonly',
-        'hybridization': {
-            'ksp_type': 'cg',
-            'ksp_rtol': 1e-6,
-            'pc_type': 'lu'
-        }#,
-        #'snes': {
-        #    'lag_jacobian': -2
-        #}
-    }
+
+
     
 
 
