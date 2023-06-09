@@ -54,7 +54,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     TideSolver.snes.destroy()
     c.assign(Constant(np.exp(J_hat)))
     TideSolver, wn, wn1, t, F0, c = solve_tides(c)
-    
+
     y_obs_c_hat = gauge_settwo(TideSolver, wn, wn1, t, t_trunc = t_trunc, gauge_num = 20, nsteps = nsteps)
     
     d = np.exp(phi(y_act, y_obs_c) - phi(y_act, y_obs_c_hat))
@@ -76,4 +76,5 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
   np.savetxt('acc_probs.txt', np.array(acc_probs), fmt='%.6f')
   np.savetxt('exp_J_hats.txt', np.array(exp_J_hats), fmt='%.6f')
   np.savetxt('cumulative_avg.txt', np.array([cumulative_avg]), fmt='%.6f')
-  return np.exp(J), acc_probs, exp_J_hats, cumulative_avg
+  acp = sum(acc_probs)/len(acc_probs)
+  return np.exp(J), acc_probs, exp_J_hats, cumulative_avg, acp
