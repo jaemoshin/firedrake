@@ -64,7 +64,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     
     acc_probs.append(acc_prob)
     exp_J_hats.append(np.exp(J_hat))
-    if k % 10 == 0:
+    if k % 5 == 0:
       gc.collect()
     if unif <= acc_prob:
        J = J_hat
