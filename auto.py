@@ -16,8 +16,6 @@ TideSolver, wn, wn1, t, F0, c = solve_tides(c = Constant(0.0001))
 result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
 c.assign(0.001)
-del TideSolver
-TideSolver.reinitialize()
 
 result2 = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
