@@ -25,7 +25,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     """
     entries = y_act-y_obs
     squared_norm = np.linalg.norm(entries) ** 2
-    res = squared_norm *10**18
+    res = squared_norm *10
     print(res)
     return res
 
