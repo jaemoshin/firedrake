@@ -72,7 +72,7 @@ def solve_tides(c = Constant(0.0001)):
             #'ksp_converged_reason':None,
             'ksp_rtol': 1e-6,
             'pc_type': 'lu',
-            'pc_factor_mat_solver_type':'mumps'
+            #'pc_factor_mat_solver_type':'mumps'
         }
     }
 
