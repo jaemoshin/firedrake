@@ -37,7 +37,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
 
 
   for k in ProgressBar(f'iterations').iter(range(iter)):
-    TideSolver.clear()
+    TideSolver = None 
     xi = np.random.multivariate_normal(np.zeros(( len, )), cov , size = len)#Centred Gaussian Measure
     #positive J ~ multivariate normal (log c0, )
     #c = exp(J) 
