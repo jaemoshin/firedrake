@@ -66,6 +66,7 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     exp_J_hats.append(np.exp(J_hat))
     if k % 5 == 0:
       gc.collect()
+      firedrake-clean
     if unif <= acc_prob:
        J = J_hat
        print("accepted")
