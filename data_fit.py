@@ -3,6 +3,7 @@ from firedrake import *
 from solver import gauge_settwo
 from solver import solve_tides
 import gc
+import shutil
 def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.01, cov = np.ones((1,1)), t_trunc = 900, nsteps = 1200):
 
   import numpy as np
@@ -66,7 +67,8 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     exp_J_hats.append(np.exp(J_hat))
     if k % 5 == 0:
       gc.collect()
-      firedrake-clean
+      path = "/home/ma/j/jms19/.cache/pytools"
+      shutil.rmtree(path)
     if unif <= acc_prob:
        J = J_hat
        print("accepted")
