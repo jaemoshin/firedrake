@@ -3,9 +3,6 @@ from firedrake import *
 from solver import gauge_settwo
 from solver import solve_tides
 import gc
-import shutil
-import os
-
 
 def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.01, cov = np.ones((1,1)), t_trunc = 900, nsteps = 1200):
 
@@ -64,15 +61,6 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
     acc_prob = np.minimum(1, d)
     
     print(acc_prob)
-    lock_file_path = "/home/ma/j/jms19/.cache/pytools/pdict-v4-loopy-memoize-cache-preprocess_program-LoopyKeyBuilder.LoopyKeyBuilder-v0-2022.1-islpy2023.1-cgen2020.1-cd388f749efd35d67a75612442b34b1e1f7562de-v1-py3.8.10.final.0/4ae57011fb0d5c97f050162709cc359c5e0e2d9db8e03dc911006b0df5a1302d.lock"
-
-    try:
-        os.remove(lock_file_path)
-    except OSError:
-        pass  # Handle the case when the lock file doesn't exist or cannot be deleted
-
-    path = "/home/ma/j/jms19/.cache/pytools"
-    shutil.rmtree(path)
     
     acc_probs.append(acc_prob)
     exp_J_hats.append(np.exp(J_hat))
