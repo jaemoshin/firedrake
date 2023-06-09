@@ -27,7 +27,7 @@ from data_fit import pcn
 
 # Define the parameters for pcn
 
-iterations = 1
+iterations = 100
 beta = 0.025
 cov = np.ones((1, 1))
 
