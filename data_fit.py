@@ -32,9 +32,9 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
   lengt = 1
   J = np.log(c.dat.data)[0]
   acc_probs = []
+  # Initialize an empty list to store sampled c values
   exp_J_hats = []
   cumulative_avg = np.exp(J)
-
 
   for k in ProgressBar(f'iterations').iter(range(iter)):
     
@@ -70,7 +70,31 @@ def pcn(TideSolver, wn, wn1, t, y_act, c = Constant(0.001), iter = 10, beta = 0.
        J = J_hat
        print("accepted")
        cumulative_avg = (cumulative_avg * k + np.exp(J_hat))/(k + 1)
+    # Append the sampled c value to the list
+    
     print("c = " + str(np.exp(J)))
+  
+  # Calculate mean and standard deviation of sampled_c values
+  mean_c = np.mean(exp_J_hats)
+  std_c = np.std(exp_J_hats)
+
+  plt.clf()
+  # Plot histogram of sampled_c values
+  plt.hist(sampled_c, bins=20, density=True)
+
+  # Add a vertical line at the true value of c
+  true_c = 0.0001
+  plt.axvline(x=true_c, color='r', linestyle='--')
+
+  # Display mean and standard deviation on the plot
+  plt.text(0.5, 0.9, f"Mean: {mean_c:.3f}\nStd: {std_c:.3f}", transform=plt.gca().transAxes)
+
+  # Set labels for x-axis and y-axis
+  plt.xlabel('c')
+  plt.ylabel('Density')
+
+  plt.show()
+  plt.savefig("post_dist.pdf")
   
   # Save the results to a file
   np.savetxt('pcn_results.txt', np.array([np.exp(J)]), fmt='%.6f')
