@@ -12,7 +12,7 @@ nsteps = 200
 TideSolver, wn, wn1, t, F0, c = solve_tides(c = Constant(0.0001))
 
 # Call the gauge_set function
-
+print("this commit worked")
 TideSolver.snes.setLagJacobian(-2)
 result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
