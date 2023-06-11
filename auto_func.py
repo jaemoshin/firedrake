@@ -1,9 +1,8 @@
 import numpy as np
 from firedrake import *
-from data_gen import gauge_set
-from data_fit import pcn
-from solver import solve_tides
-from solver import gauge_settwo
+from data_fit_func import pcn
+from solver_func import solve_tides
+from solver_func import gauge_settwo
 # Define the parameters for gauge_set
 
 c_min = 0.00005
