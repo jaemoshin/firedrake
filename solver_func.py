@@ -1,82 +1,89 @@
 from firedrake import *
-import matplotlib.pyplot as plt
 import numpy as np
+from scipy.sparse import diags
+from scipy.sparse.linalg import spsolve
 
-def solve_tides(c = Constant(0.0001)):
-    
+def solve_tides(c):
     """
-    Generate a 2D numpy array with rows as tide gauges and columns as time
+    Create and return a solver for the tide simulation problem.
 
     inputs:
-    c: Damping Constant
-    t_trunc: time until which the array will be truncated to ignore the spin up time
+    c: Probability distribution (Function or Expression)
 
     output:
-    list: 2D numpy array with rows as tide gauges and columns as time
+    TideSolver: NonlinearVariationalSolver object
     """
+    def smooth_continuous_distribution(data, iterations=10, seed=None):
+        np.random.seed(seed)
+        n = len(data)
+        rhs = np.random.rand(n)
+        smoothed_dist = data.copy()
 
-    mesh = PeriodicRectangleMesh(50,50,20000, 5000, direction = "x") #mesh with actual length
-    V = FunctionSpace(mesh, "BDM", 1) #Linear vector fields in each triangle
-    #normal component is continuous between triangles
-    Q = FunctionSpace(mesh, "DG", 0) #constant in each triangle
-    #no continuity constraints
-    W = V*Q 
-    wn = Function(W) 
-    wn1 = Function(W)  
+        for _ in range(iterations):
+            laplacian = diags([-1, 2, -1], [-1, 0, 1], shape=(n, n), format='csr')
+            smoothed_dist = spsolve(laplacian, rhs, permc_spec='NATURAL')
+            rhs = smoothed_dist + np.random.rand(n)
+
+        smoothed_dist = np.trapz(smoothed_dist, data)  # Normalize the distribution
+        if integral != 0:
+            smoothed_dist /= integral
+        return data, smoothed_dist
+    
+    mesh = PeriodicRectangleMesh(50, 50, 20000, 5000, direction="x")  # mesh with actual length
+    V = FunctionSpace(mesh, "BDM", 1)  # Linear vector fields in each triangle
+    Q = FunctionSpace(mesh, "DG", 0)  # constant in each triangle
+    W = V * Q
+    wn = Function(W)
+    wn1 = Function(W)
 
     v, phi = TestFunctions(W)
-    f = Constant(10**-5) #10^-5 Coriolis?
-    #f = Constant(0)
-    g = Constant(9.81) #9.81 #gravity constant
-    #b = Constant(0) #0 Sea Level
-    b = Function(Q)  
-    x,y = SpatialCoordinate(mesh)
+    f = Constant(10 ** -5)  # 10^-5 Coriolis?
+    g = Constant(9.81)  # 9.81 gravity constant
+    x, y = SpatialCoordinate(mesh)
     midx = Constant(10000)
     midy = Constant(2500)
     scale = Constant(1000)
-    b.interpolate(350*exp( -((x-midx)**2 / scale**2/2 + (y-midy)**2 / scale**2/ 2) )) #Gaussian Hill
-    #c = Constant(0.001) #? Damping Constant (unknown value)
-    dt0 = 12*3600/50 
-    dt = Constant(dt0) #12*3600/50 timestep
-    H = Constant(700) #700 Ocean depth
-    t = Constant(0) #time
-    F0 = Constant(10**-1) #10^-7 
-    #F0 = 0
-    F = F0*as_vector((sin(2*pi*t/(12*3600)), 0)) 
+    b = Function(Q)
+    b.interpolate(350 * exp(-((x - midx) ** 2 / scale ** 2 / 2 + (y - midy) ** 2 / scale ** 2 / 2)))  # Gaussian Hill
 
-    un, etan = wn.subfunctions
-    print('norm before', norm(etan))
+    # Smooth c by solving a Poisson problem
+    c_data = c.dat.data_ro[:]
+    c_smooth_data = smooth_continuous_distribution(c_data, iterations=10, seed=123)[1]
+    c_smooth = Function(Q)
+    c_smooth.dat.data[:] = c_smooth_data
+
+    dt0 = 12 * 3600 / 50
+    dt = Constant(dt0)  # 12*3600/50 timestep
+    H = Constant(700)  # 700 Ocean depth
+    t = Constant(0)  # time
+    F0 = Constant(10 ** -1)  # 10^-7
+    F = F0 * as_vector((sin(2 * pi * t / (12 * 3600)), 0))
+
+    un, etan = wn.split()
     un, etan = split(wn)
     un1, etan1 = split(wn1)
-    unh = (un + un1)/2
-    etanh = (etan + etan1)/2
+    unh = (un + un1) / 2
+    etanh = (etan + etan1) / 2
+
     equation = (
-        inner(v, un1 - un) + f*inner(v, as_vector((-unh[1], unh[0])))*dt
-        - g*div(v)*(etanh)*dt
-        - inner(F, v)*dt
-        + c*inner(v, unh)*dt
-        + phi*(etan1 - etan) + (H-b)*phi*div(unh)*dt
-    )*dx
+        inner(v, un1 - un) + f * inner(v, as_vector((-unh[1], unh[0]))) * dt
+        - g * div(v) * (etanh) * dt
+        - inner(F, v) * dt
+        + c_smooth * inner(v, unh) * dt
+        + phi * (etan1 - etan) + (H - b) * phi * div(unh) * dt
+    ) * dx
 
-    Bc = [DirichletBC(W.sub(0), [0,0], "on_boundary")]
-    TideProblem = NonlinearVariationalProblem(equation, wn1, bcs = Bc)
+    Bc = [DirichletBC(W.sub(0), [0, 0], "on_boundary")]
+    TideProblem = NonlinearVariationalProblem(equation, wn1, bcs=Bc)
     solver_parameters = {
-        'snes_lag_jacobian': -2,
-        'snes_lag_jacobian_persists' : False,
-        'mat_type': 'matfree',
-        'pc_type': 'python',
-        'pc_python_type': 'firedrake.HybridizationPC',
-        'ksp_type': 'preonly',
-        #'ksp_monitor_true_residual': True,
-        'hybridization': {
-            'ksp_type': 'cg',
-            #'ksp_converged_reason':None,
-            'ksp_rtol': 1e-6,
-            'pc_type': 'lu',
-            #'pc_factor_mat_solver_type':'mumps'
-        }
+        'snes_lag_jacobian': 1,
+        'snes_lag_preconditioner': 1,
+        'snes_max_it': 10,
+        'snes_atol': 1e-6,
+        'snes_rtol': 1e-6,
+        'snes_monitor': None,
+        'snes_converged_reason': None,
     }
-
     TideSolver = NonlinearVariationalSolver(TideProblem, solver_parameters=solver_parameters)
     
     return TideSolver, wn, wn1, t, F0, c
@@ -87,7 +94,7 @@ def gauge_settwo(TideSolver, wn, wn1, t, t_trunc = 900, gauge_num = 20, nsteps =
     t0 = 0.0
     dt0 = 12*3600/50 
     file0 = File("tide.pvd")
-    u, eta = wn.subfunctions
+    u, eta = wn.split()
     
     listt = np.zeros((gauge_num, nsteps))
     
