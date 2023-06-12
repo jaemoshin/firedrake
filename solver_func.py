@@ -24,7 +24,7 @@ def solve_tides(c):
             smoothed_dist = spsolve(laplacian, rhs, permc_spec='NATURAL')
             rhs = smoothed_dist + np.random.rand(n)
 
-        smoothed_dist = np.trapz(smoothed_dist, data)  # Normalize the distribution
+        integral = np.trapz(smoothed_dist, data)  # Normalize the distribution
         if integral != 0:
             smoothed_dist /= integral
         return data, smoothed_dist
@@ -47,8 +47,7 @@ def solve_tides(c):
     b.interpolate(350 * exp(-((x - midx) ** 2 / scale ** 2 / 2 + (y - midy) ** 2 / scale ** 2 / 2)))  # Gaussian Hill
 
     # Smooth c by solving a Poisson problem
-    c_data = c.dat.data_ro[:]
-    c_smooth_data = smooth_continuous_distribution(c_data, iterations=10, seed=123)[1]
+    c_smooth_data = smooth_continuous_distribution(c, iterations=10, seed=123)[1]
     c_smooth = Function(Q)
     c_smooth.dat.data[:] = c_smooth_data
 
