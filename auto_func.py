@@ -13,7 +13,6 @@ pcg = PCG64(seed=123456789)
 rg = RandomGenerator(pcg)
 # normal distribution
 f_normal = rg.normal(V, 0.0, 1.0)
-
 t_trunc = 0
 gauge_num =  20
 nsteps = 100
@@ -21,9 +20,9 @@ TideSolver, wn, wn1, t, F0, c = solve_tides(f_normal.dat.data)
 
 # Call the gauge_set function
 
-result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
+#result = gauge_settwo(TideSolver, wn, wn1, t= t, t_trunc=t_trunc, gauge_num=gauge_num, nsteps=nsteps)
 
-print(result)
+
 """
 # Import the pcn function from data_fit
 from data_fit_func import pcn

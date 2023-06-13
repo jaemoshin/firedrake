@@ -1,16 +1,17 @@
 import numpy as np
 from firedrake import *
+from data_fit_func import pcn
+from solver_func import solve_tides
+from solver_func import gauge_settwo
 from scipy.sparse import diags
 from scipy.sparse.linalg import spsolve
 
 mesh = PeriodicRectangleMesh(50, 50, 20000, 5000, direction="x")
 V = FunctionSpace(mesh, "BDM", 1)
 Q = FunctionSpace(mesh, "DG", 0)  # constant in each triangle
-
 # PCG64 random number generator
 pcg = PCG64(seed=123456789)
 rg = RandomGenerator(pcg)
-
 # normal distribution
 f_normal = rg.normal(V, 0.0, 1.0)
 
@@ -30,11 +31,6 @@ def smooth_continuous_distribution(data, iterations=10, seed=None):
         smoothed_dist /= integral
     return data, smoothed_dist
 
-c_smooth_data = smooth_continuous_distribution(f_normal.dat.data, iterations=10, seed=123)[1]
-print(len(c_smooth_data))
+c = smooth_continuous_distribution(f_normal.dat.data, iterations=10, seed=123)[1]
 
-c_smooth = Function(Q)
-c_smooth_data_resized = np.resize(c_smooth_data, len(c_smooth.dat.data))
-c_smooth.dat.data[:] = c_smooth_data_resized
-
-print(len(c_smooth.dat.data[:]))
+print(len(c))
