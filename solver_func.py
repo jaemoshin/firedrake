@@ -49,8 +49,11 @@ def solve_tides(c):
     # Smooth c by solving a Poisson problem
     c_smooth_data = smooth_continuous_distribution(c, iterations=10, seed=123)[1]
     c_smooth = Function(Q)
-    c_smooth.dat.data[:] = c_smooth_data
+    c_smooth_data_resized = np.resize(c_smooth_data, len(c_smooth.dat.data))
+    c_smooth.dat.data[:] = c_smooth_data_resized
 
+    c = c_smooth.dat.data[:][1]
+    
     dt0 = 12 * 3600 / 50
     dt = Constant(dt0)  # 12*3600/50 timestep
     H = Constant(700)  # 700 Ocean depth
@@ -58,31 +61,39 @@ def solve_tides(c):
     F0 = Constant(10 ** -1)  # 10^-7
     F = F0 * as_vector((sin(2 * pi * t / (12 * 3600)), 0))
 
-    un, etan = wn.split()
+    un, etan = wn.split() 
+    print('norm before', norm(etan))
     un, etan = split(wn)
     un1, etan1 = split(wn1)
-    unh = (un + un1) / 2
-    etanh = (etan + etan1) / 2
-
+    unh = (un + un1)/2
+    etanh = (etan + etan1)/2
     equation = (
-        inner(v, un1 - un) + f * inner(v, as_vector((-unh[1], unh[0]))) * dt
-        - g * div(v) * (etanh) * dt
-        - inner(F, v) * dt
-        + c_smooth * inner(v, unh) * dt
-        + phi * (etan1 - etan) + (H - b) * phi * div(unh) * dt
-    ) * dx
+        inner(v, un1 - un) + f*inner(v, as_vector((-unh[1], unh[0])))*dt
+        - g*div(v)*(etanh)*dt
+        - inner(F, v)*dt
+        + c*inner(v, unh)*dt
+        + phi*(etan1 - etan) + (H-b)*phi*div(unh)*dt
+    )*dx
 
-    Bc = [DirichletBC(W.sub(0), [0, 0], "on_boundary")]
-    TideProblem = NonlinearVariationalProblem(equation, wn1, bcs=Bc)
+    Bc = [DirichletBC(W.sub(0), [0,0], "on_boundary")]
+    TideProblem = NonlinearVariationalProblem(equation, wn1, bcs = Bc)
     solver_parameters = {
-        'snes_lag_jacobian': 1,
-        'snes_lag_preconditioner': 1,
-        'snes_max_it': 10,
-        'snes_atol': 1e-6,
-        'snes_rtol': 1e-6,
-        'snes_monitor': None,
-        'snes_converged_reason': None,
+        'snes_lag_jacobian': -2,
+        'snes_lag_jacobian_persists' : False,
+        'mat_type': 'matfree',
+        'pc_type': 'python',
+        'pc_python_type': 'firedrake.HybridizationPC',
+        'ksp_type': 'preonly',
+        #'ksp_monitor_true_residual': True,
+        'hybridization': {
+            'ksp_type': 'cg',
+            #'ksp_converged_reason':None,
+            'ksp_rtol': 1e-6,
+            'pc_type': 'lu',
+            #'pc_factor_mat_solver_type':'mumps'
+        }
     }
+
     TideSolver = NonlinearVariationalSolver(TideProblem, solver_parameters=solver_parameters)
     
     return TideSolver, wn, wn1, t, F0, c

@@ -5,14 +5,19 @@ from solver_func import solve_tides
 from solver_func import gauge_settwo
 # Define the parameters for gauge_set
 
-c_min = 0.00005
-c_max = 0.00015
-c_expression = np.linspace(c_min, c_max, num=5000)
+
+mesh = PeriodicRectangleMesh(50, 50, 20000, 5000, direction="x")
+V = FunctionSpace(mesh, "BDM", 1)
+# PCG64 random number generator
+pcg = PCG64(seed=123456789)
+rg = RandomGenerator(pcg)
+# normal distribution
+f_normal = rg.normal(V, 0.0, 1.0)
 
 t_trunc = 0
 gauge_num =  20
 nsteps = 100
-TideSolver, wn, wn1, t, F0, c = solve_tides(c_expression)
+TideSolver, wn, wn1, t, F0, c = solve_tides(f_normal.dat.data)
 
 # Call the gauge_set function
 
